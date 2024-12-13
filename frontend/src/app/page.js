@@ -1,8 +1,10 @@
-export default function Home() 
+import Home from "@/app/Home/page"
+import Login from "@/app/UserLogin/page"
+export default function Page() 
 {
   return(
     <>
-      <h1>App</h1>
+      <Home/>
     </>
   )
 }
