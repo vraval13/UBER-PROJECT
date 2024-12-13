@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import UserContext from "./contexts/UserContext";
+import {UserProtectWrapper} from "./UserProtectWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,13 +19,23 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  // Use `pathname` from `next/router` to determine protected routes
+  const protectedRoutes = ["/home"];
+  const isProtected = typeof window !== "undefined" && protectedRoutes.includes(window.location.pathname);
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <UserContext>
-        {children}
+          {isProtected ? (
+            <UserProtectWrapper>
+              {children}
+            </UserProtectWrapper>
+          ) : (
+            children
+          )}
         </UserContext>
       </body>
     </html>

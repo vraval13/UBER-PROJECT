@@ -1,11 +1,13 @@
-import React from 'react'
+"use client";
+import React from "react";
+import UserProtectWrapper from "@/app/UserProtectWrapper";
 
-const page = () => {
+const Home = () => {
   return (
-    <div>
-      HomePage
-    </div>
-  )
-}
+    <UserProtectWrapper>
+      <div>Welcome to the Home Page</div>
+    </UserProtectWrapper>
+  );
+};
 
-export default page
+export default Home;

@@ -1,7 +1,8 @@
 "use client";
-import Image from 'next/image'
-import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useState, useContext } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { UserDataContext } from "../contexts/UserContext";
 
 const page = () => 
 {
@@ -9,15 +10,46 @@ const page = () =>
   const [password,setPassword] = useState('');
   const [userData,setUserData] = useState({});
 
+  const { user, setUser } = useContext(UserDataContext);
+  
 
-  const submitHandler = () =>{
+  const submitHandler = async (e) =>{
     e.preventDefault();
-    setUserData({
+    // setUserData({
+    //   email:email,
+    //   password:password
+    // });
+    const userData = {
       email:email,
       password:password
-    });
-    setEmail('');
-    setPassword('');
+    };
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/users/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user);
+        localStorage.setItem("token", data.token);
+        window.location.href = "/home"; // Redirect to home page
+
+        // Reset form fields
+        
+        setEmail('');
+        setPassword('');
+      } else {
+        const errorData = await response.json();
+        console.error("Registration failed:", errorData.message || errorData);
+      }
+    } catch (error) {
+      console.error("An error occurred:", error.message);
+    }
   }
   return (
     <div className='p-7 h-screen flex flex-col justify-between'>

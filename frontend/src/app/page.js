@@ -1,10 +1,22 @@
-import Start from "@/app/Start/page"
-import Login from "@/app/UserLogin/page"
-export default function Page() 
-{
-  return(
+"use client";
+import Start from "@/app/Start/page";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+export default function Page() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      router.push("/home"); // Redirect to the home page if authenticated
+    }
+  }, []);
+
+  return (
     <>
-      <Start/>
+      <Start />
     </>
-  )
+  );
 }
