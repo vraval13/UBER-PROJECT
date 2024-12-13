@@ -1,10 +1,10 @@
-import Home from "@/app/Home/page"
+import Start from "@/app/Start/page"
 import Login from "@/app/UserLogin/page"
 export default function Page() 
 {
   return(
     <>
-      <Home/>
+      <Start/>
     </>
   )
 }
