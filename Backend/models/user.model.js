@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const bcrpt = require("bcrypt");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema({
@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
   password:{
     type:String,
     required:true,
-    select:false,
+    select:false, //here for any user query , password will not display
   },
 
   socketId:{
