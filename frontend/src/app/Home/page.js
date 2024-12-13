@@ -20,8 +20,8 @@ const Page = () => {
           />
         </div>
         <div className="bg-white pb-7 py-4 px-4">
-          <h2 className="text-2xl font-bold">Get Started with Uber</h2>
-          <Link href={'/UserLogin'} className=" flex items-center justify-center w-full bg-black text-white py-3 rounded mt-5">
+          <h2 className="text-[30px] font-semibold">Get Started with Uber</h2>
+          <Link href={'/UserLogin'} className=" flex items-center justify-center w-full bg-black text-white py-3 rounded-lg mt-5">
             Continue
           </Link>
         </div>
