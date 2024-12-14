@@ -1,10 +1,11 @@
 import React from 'react'
+import CaptainProtectWrapper from "@/app/CaptainProtectWrapper";
 
 const page = () => {
   return (
-    <div>
-      Welcome to Captain Homepage!
-    </div>
+    <CaptainProtectWrapper>
+      <div>Welcome to the Captain Home Page</div>
+    </CaptainProtectWrapper>
   )
 }
 
