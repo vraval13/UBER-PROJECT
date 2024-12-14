@@ -1,7 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import UserContext from "./contexts/UserContext";
-import {UserProtectWrapper} from "./UserProtectWrapper";
+import CaptainContext from "./contexts/CaptainContext";
+import { UserProtectWrapper } from "./UserProtectWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,15 +29,17 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <UserContext>
-          {isProtected ? (
-            <UserProtectWrapper>
-              {children}
-            </UserProtectWrapper>
-          ) : (
-            children
-          )}
-        </UserContext>
+        <CaptainContext>
+          <UserContext>
+            {isProtected ? (
+              <UserProtectWrapper>
+                {children}
+              </UserProtectWrapper>
+            ) : (
+              children
+            )}
+          </UserContext>
+        </CaptainContext>
       </body>
     </html>
   );

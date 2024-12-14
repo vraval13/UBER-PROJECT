@@ -1,7 +1,7 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useContext } from "react";
 import Link from 'next/link';
-// import { CaptainDataContext } from '../context/CapatainContext'
+import { CaptainDataContext } from '../contexts/CaptainContext';
 // import { useNavigate } from 'react-router-dom'
 // import axios from 'axios'
 import Image from 'next/image';
@@ -20,7 +20,7 @@ const page = () => {
   const [vehicleType, setVehicleType] = useState('')
 
 
-  // const { captain, setCaptain } = React.useContext(CaptainDataContext)
+  const { captain, setCaptain } = useContext(CaptainDataContext)
 
 
   const submitHandler = async (e) => {
@@ -40,23 +40,38 @@ const page = () => {
       }
     }
 
-    // const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/captains/register`, captainData)
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/captains/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(captainData),
+      });
 
-    // if (response.status === 201) {
-    //   const data = response.data
-    //   setCaptain(data.captain)
-    //   localStorage.setItem('token', data.token)
-    //   navigate('/captain-home')
-    // }
+      if (response.ok) {
+        const data = await response.json();
+        setCaptain(data.user);
+        localStorage.setItem("token", data.token);
+        window.location.href = "/CaptainHome"; // Redirect to home page
 
-    setEmail('')
-    setFirstName('')
-    setLastName('')
-    setPassword('')
-    setVehicleColor('')
-    setVehiclePlate('')
-    setVehicleCapacity('')
-    setVehicleType('')
+        // Reset form fields
+        setEmail('')
+        setFirstName('')
+        setLastName('')
+        setPassword('')
+        setVehicleColor('')
+        setVehiclePlate('')
+        setVehicleCapacity('')
+        setVehicleType('')
+
+      } else {
+        const errorData = await response.json();
+        console.error("Registration failed:", errorData.message || errorData);
+      }
+    } catch (error) {
+      console.error("An error occurred:", error.message);
+    }
 
   }
   return (
