@@ -9,10 +9,13 @@ import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
 
 const Home = () => {
-  const [pickup, setPickup] = useState("");
-  const [destination, setDestination] = useState("");
-  const [panelOpen, setPanelOpen] = useState(false);
+  const [pickup, setPickup] = useState(""); // Pickup input state
+  const [destination, setDestination] = useState(""); // Destination input state
+  const [panelOpen, setPanelOpen] = useState(false); // Expandable panel state
+  const [vehiclePanel, setVehiclePanel] = useState(false); // Vehicle options panel state
+
   const panelRef = useRef(null);
+  const vehiclePanelRef = useRef(null);
   const panelCloseRef = useRef(null);
 
   const submitHandler = (e) => {
@@ -22,28 +25,25 @@ const Home = () => {
 
   // GSAP animations for expandable panel
   useGSAP(() => {
-    if (panelOpen) {
-      gsap.to(panelRef.current, {
-        height: "70%",
-        padding: "1.5rem",
-        duration: 0.5,
-      });
-      gsap.to(panelCloseRef.current, {
-        opacity: 1,
-        duration: 0.3,
-      });
-    } else {
-      gsap.to(panelRef.current, {
-        height: "0%",
-        padding: "0",
-        duration: 0.5,
-      });
-      gsap.to(panelCloseRef.current, {
-        opacity: 0,
-        duration: 0.3,
-      });
-    }
+    gsap.to(panelRef.current, {
+      height: panelOpen ? "70%" : "0%",
+      padding: panelOpen ? 24 : 0,
+      duration: 0.5,
+    });
+
+    gsap.to(panelCloseRef.current, {
+      opacity: panelOpen ? 1 : 0,
+      duration: 0.3,
+    });
   }, [panelOpen]);
+
+  // GSAP animations for vehicle panel
+  useGSAP(() => {
+    gsap.to(vehiclePanelRef.current, {
+      transform: vehiclePanel ? "translateY(0)" : "translateY(100%)",
+      duration: 0.5,
+    });
+  }, [vehiclePanel]);
 
   return (
     <UserProtectWrapper>
@@ -67,29 +67,28 @@ const Home = () => {
         {/* Main Content */}
         <div className="absolute top-0 flex flex-col justify-end h-screen w-full">
           {/* Input Section */}
-          <div className="relative bg-white h-[30%] p-6 shadow-lg">
+          <div className="relative bg-white h-[30%] p-6">
             <h5
               ref={panelCloseRef}
               onClick={() => setPanelOpen(false)}
-              className="absolute opacity-0 right-6 top-6 text-2xl cursor-pointer transition-opacity duration-300"
+              className="absolute right-6 top-6 text-2xl cursor-pointer"
             >
               <i className="ri-arrow-down-wide-line"></i>
             </h5>
-            <h4 className="text-2xl font-semibold mb-3">Find a trip</h4>
-            <form onSubmit={submitHandler}>
+            <h4 className="text-2xl font-semibold">Find a trip</h4>
+            <form onSubmit={submitHandler} className="relative py-3">
               <input
                 onClick={() => setPanelOpen(true)}
                 value={pickup}
                 onChange={(e) => setPickup(e.target.value)}
-                className="bg-[#eee] px-12 py-3 text-lg rounded-lg w-full mt-5"
+                className="bg-[#eee] px-12 py-2 text-lg rounded-lg w-full"
                 type="text"
                 placeholder="Add a pick-up location"
               />
               <input
-                onClick={() => setPanelOpen(true)}
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
-                className="bg-[#eee] px-12 py-3 text-lg rounded-lg w-full mt-4"
+                className="bg-[#eee] px-12 py-2 text-lg rounded-lg w-full mt-3"
                 type="text"
                 placeholder="Enter your destination"
               />
@@ -97,75 +96,52 @@ const Home = () => {
           </div>
 
           {/* Expandable Panel */}
-          <div
-            ref={panelRef}
-            className="bg-white h-0 overflow-hidden shadow-md transition-all duration-300"
-          >
-            <LocationSearchPanel />
+          <div ref={panelRef} className="bg-white h-0 overflow-hidden">
+            <LocationSearchPanel
+              setPanelOpen={setPanelOpen}
+              setVehiclePanel={setVehiclePanel}
+              setPickup={setPickup}
+            />
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="fixed bottom-0 w-full bg-white px-3 py-6 shadow-md">
+        {/* Footer (Vehicle Options) */}
+        <div
+          ref={vehiclePanelRef}
+          className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
+        >
           <h2 className="text-2xl font-semibold mb-5">Choose a Vehicle</h2>
-          <div className="flex border-2 mb-2 active:border-black rounded-xl w-full p-3 items-center justify-between   ">
-            <Image
-              className="h-12"
-              src="/car.webp"
-              alt="Car"
-              width={64}
-              height={64}
-            />
-            <div className="-ml-2 w-1/2">
-              <h4 className="text-base font-medium">
-                UberGo <span className="ml-2"><i className="ri-user-3-fill"></i> 4</span>
-              </h4>
-              <h5 className="text-sm font-medium">2 mins away</h5>
-              <p className="text-xs">
-                Affordable, compact rides
-              </p>
-            </div>
-            <h2 className="text-lg font-semibold">$193.20</h2>
-          </div>
-          <div className="flex border-2 mb-2 active:border-black rounded-xl w-full p-3 items-center justify-between   ">
-            <Image
-              className="h-12"
-              src="/bike.webp"
-              alt="Bike"
-              width={64}
-              height={64}
-            />
-            <div className="-ml-2 w-1/2">
-              <h4 className="text-base font-medium">
-                Moto <span className="ml-2"><i className="ri-user-3-fill"></i> 1</span>
-              </h4>
-              <h5 className="text-sm font-medium">3 mins away</h5>
-              <p className="text-xs">
-                Affordable motorcycle rides
-              </p>
-            </div>
-            <h2 className="text-lg font-semibold">$65.17</h2>
-          </div>
-          <div className="flex border-2 mb-2 active:border-black rounded-xl w-full p-3 items-center justify-between   ">
-            <Image
-              className="h-12"
-              src="/auto.webp"
-              alt="Auto"
-              width={64}
-              height={64}
-            />
-            <div className="-ml-2 w-1/2">
-              <h4 className="text-base font-medium">
-                UberAuto <span className="ml-2"><i className="ri-user-3-fill"></i> 3</span>
-              </h4>
-              <h5 className="text-sm font-medium">3 mins away</h5>
-              <p className="text-xs">
-                Affordable Auto rides
-              </p>
-            </div>
-            <h2 className="text-lg font-semibold">$118.86</h2>
-          </div>
 
+          {/* Vehicle Cards */}
+          {[
+            { name: "UberGo", seats: 4, time: "2 mins away", price: "$193.20", image: "/car.webp" },
+            { name: "Moto", seats: 1, time: "3 mins away", price: "$65.17", image: "/bike.webp" },
+            { name: "UberAuto", seats: 3, time: "3 mins away", price: "$118.86", image: "/auto.webp" },
+          ].map((vehicle, index) => (
+            <div
+              key={index}
+              className="flex border-2 mb-2 active:border-black rounded-xl w-full p-3 items-center justify-between"
+            >
+              <Image
+                className="h-12"
+                src={vehicle.image}
+                alt={vehicle.name}
+                width={64}
+                height={64}
+              />
+              <div className="-ml-2 w-1/2">
+                <h4 className="text-base font-medium">
+                  {vehicle.name}{" "}
+                  <span className="ml-2">
+                    <i className="ri-user-3-fill"></i> {vehicle.seats}
+                  </span>
+                </h4>
+                <h5 className="text-sm font-medium">{vehicle.time}</h5>
+                <p className="text-xs">Affordable rides</p>
+              </div>
+              <h2 className="text-lg font-semibold">{vehicle.price}</h2>
+            </div>
+          ))}
         </div>
       </div>
     </UserProtectWrapper>
