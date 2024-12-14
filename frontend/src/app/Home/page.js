@@ -54,7 +54,8 @@ const Home = () => {
         </div>
 
         {/* Map Section */}
-        <div className="h-screen w-screen">
+        <div
+        className="h-screen w-screen">
           <Image
             className="h-full w-full object-cover"
             src="/map.gif"
@@ -108,8 +109,11 @@ const Home = () => {
         {/* Footer (Vehicle Options) */}
         <div
           ref={vehiclePanelRef}
-          className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
+          className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-14"
         >
+          <h5 className="p-1 text-center w-[93%] absolute top-0 " onClick={()=>{
+            setVehiclePanel(false);
+          }}><i className=" text-3xl text-gray-200 ri-arrow-down-wide-line"></i></h5>
           <h2 className="text-2xl font-semibold mb-5">Choose a Vehicle</h2>
 
           {/* Vehicle Cards */}

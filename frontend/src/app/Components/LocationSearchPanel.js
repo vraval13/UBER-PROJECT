@@ -14,9 +14,9 @@ const LocationSearchPanel = ({ setVehiclePanel, setPickup, setPanelOpen }) => {
       {locations.map((location, index) => (
         <div
           onClick={() => {
-            setPickup(location); // Update the pickup location
-            setPanelOpen(false); // Close location search panel
-            setVehiclePanel(true); // Show vehicle options panel
+            setPickup(location); 
+            setPanelOpen(false); 
+            setVehiclePanel(true); 
           }}
           key={index} // Add a unique key for each item
           className="flex gap-4 border-2 p-3 border-gray-50 active:border-black rounded-xl items-center my-2 justify-start cursor-pointer"
