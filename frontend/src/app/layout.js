@@ -3,6 +3,7 @@ import "./globals.css";
 import UserContext from "./contexts/UserContext";
 import CaptainContext from "./contexts/CaptainContext";
 import { UserProtectWrapper } from "./UserProtectWrapper";
+import CaptainProtectWrapper from "./CaptainProtectWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,9 +21,17 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  // Use `pathname` from `next/router` to determine protected routes
-  const protectedRoutes = ["/home"];
-  const isProtected = typeof window !== "undefined" && protectedRoutes.includes(window.location.pathname);
+  // Define protected routes for both wrappers
+  const userProtectedRoutes = ["/home"];
+  const captainProtectedRoutes = ["/CaptainHome"];
+  const currentPath =
+    typeof window !== "undefined" ? window.location.pathname : "";
+
+  const isUserProtected =
+    typeof window !== "undefined" && userProtectedRoutes.includes(currentPath);
+  const isCaptainProtected =
+    typeof window !== "undefined" &&
+    captainProtectedRoutes.includes(currentPath);
 
   return (
     <html lang="en">
@@ -31,10 +40,10 @@ export default function RootLayout({ children }) {
       >
         <CaptainContext>
           <UserContext>
-            {isProtected ? (
-              <UserProtectWrapper>
-                {children}
-              </UserProtectWrapper>
+            {isCaptainProtected ? (
+              <CaptainProtectWrapper>{children}</CaptainProtectWrapper>
+            ) : isUserProtected ? (
+              <UserProtectWrapper>{children}</UserProtectWrapper>
             ) : (
               children
             )}

@@ -1,7 +1,8 @@
 "use client";
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useState, useContext } from "react";
+import { CaptainDataContext } from '../contexts/CaptainContext';
 
 const page = () => {
   const [email, setEmail] = useState('');
@@ -9,14 +10,45 @@ const page = () => {
   const [captainData, setCaptainData] = useState({});
 
 
-  const submitHandler = () => {
+  const { captain, setCaptain } = useContext(CaptainDataContext)
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    setCaptainData({
+    // setCaptainData({
+    //   email: email,
+    //   password: password
+    // });
+    const captain = {
       email: email,
       password: password
-    });
-    setEmail('');
-    setPassword('');
+    }
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/captains/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(captain),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setCaptain(data.user);
+        localStorage.setItem("token", data.token);
+        window.location.href = "/CaptainHome"; // Redirect to home page
+
+        // Reset form fields
+
+        setEmail('');
+        setPassword('');
+      } else {
+        const errorData = await response.json();
+        console.error("Registration failed:", errorData.message || errorData);
+      }
+    } catch (error) {
+      console.error("An error occurred:", error.message);
+    }
   }
 
   return (
