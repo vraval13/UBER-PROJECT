@@ -7,16 +7,26 @@ import React, { useState, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
+import VehiclePanel from "../Components/VehiclePanel";
+import ConfirmRide from "../Components/ConfirmRide";
+import LookingForDriver from "../Components/LookingForDriver";
+import WaitForDriver from "../Components/WaitForDriver";
 
 const Home = () => {
-  const [pickup, setPickup] = useState(""); // Pickup input state
-  const [destination, setDestination] = useState(""); // Destination input state
-  const [panelOpen, setPanelOpen] = useState(false); // Expandable panel state
-  const [vehiclePanel, setVehiclePanel] = useState(false); // Vehicle options panel state
+  const [pickup, setPickup] = useState("");
+  const [destination, setDestination] = useState("");
+  const [panelOpen, setPanelOpen] = useState(false);
+  const [vehiclePanel, setVehiclePanel] = useState(false);
+  const [confirmRidePanel, setConfirmRidePanel] = useState(false);
+  const [vehicleFound, setVehicleFound] = useState(false);
+  const [waitingForDriver, setWaitingForDriver] = useState(false);
 
   const panelRef = useRef(null);
   const vehiclePanelRef = useRef(null);
+  const confirmRidePanelRef = useRef(null);
   const panelCloseRef = useRef(null);
+  const vehicleFoundRef = useRef(null);
+  const waitingForDriverRef = useRef(null);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -45,6 +55,27 @@ const Home = () => {
     });
   }, [vehiclePanel]);
 
+  useGSAP(() => {
+    gsap.to(confirmRidePanelRef.current, {
+      transform: confirmRidePanel ? "translateY(0)" : "translateY(100%)",
+      duration: 0.5,
+    });
+  }, [confirmRidePanel]);
+
+  useGSAP(() => {
+    gsap.to(vehicleFoundRef.current, {
+      transform: vehicleFound ? "translateY(0)" : "translateY(100%)",
+      duration: 0.5,
+    });
+  }, [vehicleFound]);
+
+  useGSAP(() => {
+    gsap.to(waitingForDriverRef.current, {
+      transform: waitingForDriver ? "translateY(0)" : "translateY(100%)",
+      duration: 0.5,
+    });
+  }, [waitingForDriver]);
+
   return (
     <UserProtectWrapper>
       <div className="h-screen relative overflow-hidden">
@@ -54,8 +85,7 @@ const Home = () => {
         </div>
 
         {/* Map Section */}
-        <div
-        className="h-screen w-screen">
+        <div className="h-screen w-screen">
           <Image
             className="h-full w-full object-cover"
             src="/map.gif"
@@ -106,46 +136,33 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Footer (Vehicle Options) */}
+        {/* Footer Panels */}
         <div
           ref={vehiclePanelRef}
-          className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-14"
+          className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
         >
-          <h5 className="p-1 text-center w-[93%] absolute top-0 " onClick={()=>{
-            setVehiclePanel(false);
-          }}><i className=" text-3xl text-gray-200 ri-arrow-down-wide-line"></i></h5>
-          <h2 className="text-2xl font-semibold mb-5">Choose a Vehicle</h2>
+          <VehiclePanel setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
+        </div>
 
-          {/* Vehicle Cards */}
-          {[
-            { name: "UberGo", seats: 4, time: "2 mins away", price: "$193.20", image: "/car.webp" },
-            { name: "Moto", seats: 1, time: "3 mins away", price: "$65.17", image: "/bike.webp" },
-            { name: "UberAuto", seats: 3, time: "3 mins away", price: "$118.86", image: "/auto.webp" },
-          ].map((vehicle, index) => (
-            <div
-              key={index}
-              className="flex border-2 mb-2 active:border-black rounded-xl w-full p-3 items-center justify-between"
-            >
-              <Image
-                className="h-12"
-                src={vehicle.image}
-                alt={vehicle.name}
-                width={64}
-                height={64}
-              />
-              <div className="-ml-2 w-1/2">
-                <h4 className="text-base font-medium">
-                  {vehicle.name}{" "}
-                  <span className="ml-2">
-                    <i className="ri-user-3-fill"></i> {vehicle.seats}
-                  </span>
-                </h4>
-                <h5 className="text-sm font-medium">{vehicle.time}</h5>
-                <p className="text-xs">Affordable rides</p>
-              </div>
-              <h2 className="text-lg font-semibold">{vehicle.price}</h2>
-            </div>
-          ))}
+        <div
+          ref={confirmRidePanelRef}
+          className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
+        >
+          <ConfirmRide setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound}/>
+        </div>
+
+        <div
+          ref={vehicleFoundRef}
+          className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
+        >
+          <LookingForDriver setVehicleFound={setVehicleFound}/>
+        </div>
+
+        <div
+          ref={waitingForDriverRef}
+          className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
+        >
+          <WaitForDriver setWaitingForDriver={setWaitingForDriver}/>
         </div>
       </div>
     </UserProtectWrapper>
