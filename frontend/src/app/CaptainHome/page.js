@@ -1,12 +1,36 @@
-import React from 'react'
+"use client";
+import React, { useState, useRef } from "react";
 import CaptainProtectWrapper from "@/app/CaptainProtectWrapper";
 import Link from 'next/link';
 import Image from 'next/image';
 import "remixicon/fonts/remixicon.css";
 import CaptainDetails from '../Components/CaptainDetails';
 import RidePopUp from '../Components/RidePopUp';
+import { useGSAP } from '@gsap/react';
+import gsap from "gsap";
+import ConfirmRidePopUp from "../Components/ConfirmRidePopUp";
 
 const page = () => {
+  const [ridePopUpPanel, setRidePopUpPanel] = useState(true);
+  const [confirmRidePopUpPanel, setConfirmRidePopUpPanel] = useState(false);
+
+  const ridePopUpPanelRef = useRef(null);
+  const confirmRidePopUpPanelRef = useRef(null);
+
+  useGSAP(() => {
+    gsap.to(ridePopUpPanelRef.current, {
+      transform: ridePopUpPanel ? "translateY(0)" : "translateY(100%)",
+      duration: 0.5,
+    });
+  }, [ridePopUpPanel]);
+
+  useGSAP(() => {
+    gsap.to(confirmRidePopUpPanelRef.current, {
+      transform: confirmRidePopUpPanel ? "translateY(0)" : "translateY(100%)",
+      duration: 0.5,
+    });
+  }, [confirmRidePopUpPanel]);
+
   return (
     <CaptainProtectWrapper>
       <div className="h-screen">
@@ -18,7 +42,7 @@ const page = () => {
             <i className="text-lg font-medium ri-logout-box-r-line"></i>
           </Link >
         </div>
-        <div clasName="h-3/5">
+        <div className="h-3/5">
           <Image
             className="h-full w-full object-cover"
             src="/map.gif"
@@ -28,13 +52,23 @@ const page = () => {
           />
         </div>
         <div className="h-2/5 p-6">
-          <CaptainDetails/>
+          <CaptainDetails />
         </div>
+
         <div
-          className="fixed w-full z-10 bottom-0  bg-white px-3 py-6 pt-12"
+          ref={ridePopUpPanelRef}
+          className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
         >
-          <RidePopUp/>
+          <RidePopUp setRidePopUpPanel={setRidePopUpPanel} setConfirmRidePopUpPanel={setConfirmRidePopUpPanel}/>
         </div>
+
+        <div
+          ref={confirmRidePopUpPanelRef}
+          className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
+        >
+          <ConfirmRidePopUp setConfirmRidePopUpPanel={setConfirmRidePopUpPanel} setRidePopUpPanel={setRidePopUpPanel} />
+        </div>
+
       </div>
     </CaptainProtectWrapper>
   )
