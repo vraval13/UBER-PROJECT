@@ -7,7 +7,7 @@ const Loading = () => {
       {/* Uber Logo */}
       <div className="mb-6">
         <Image
-          src="/uber-logo.png" // Make sure the logo image exists in the public folder
+          src="/logo.png" // Make sure the logo image exists in the public folder
           alt="Uber Logo"
           width={150}
           height={50}
