@@ -1,8 +1,9 @@
 import Image from 'next/image'
+import Link from 'next/link';
 import React from 'react'
 import "remixicon/fonts/remixicon.css";
 
-const FinishRide = () => {
+const FinishRide = (props) => {
 
   return (
     <div>
@@ -49,9 +50,10 @@ const FinishRide = () => {
 
         <div className='mt-10 w-full'>
 
-          <button
+          <Link
+            href={'/CaptainHome'}
             // onClick={endRide}
-            className='w-full mt-5 flex  text-lg justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Finish Ride</button>
+            className='w-full mt-5 flex  text-lg justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Finish Ride</Link>
         </div>
       </div>
     </div>

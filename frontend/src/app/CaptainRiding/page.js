@@ -57,7 +57,7 @@ const page = () => {
         ref={finishRidePanelRef}
         className="fixed w-full z-10 bottom-0 h-screen translate-y-full bg-white px-3 py-10 pt-12"
       >
-        <FinishRide
+        <FinishRide setFinishRidePanel={setFinishRidePanel}
         />
       </div>
 
