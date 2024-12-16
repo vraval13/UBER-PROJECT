@@ -4,6 +4,7 @@ import UserContext from "./contexts/UserContext";
 import CaptainContext from "./contexts/CaptainContext";
 import { UserProtectWrapper } from "./UserProtectWrapper";
 import CaptainProtectWrapper from "./CaptainProtectWrapper";
+import "remixicon/fonts/remixicon.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

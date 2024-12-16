@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const ConfirmRidePopUp = (props) => {
 
@@ -47,10 +48,12 @@ const ConfirmRidePopUp = (props) => {
         </div>
 
         <div className='mt-6 w-full'>
-          <form>
-            {/* <input value={otp} onChange={(e) => setOtp(e.target.value)} type="text" className='bg-[#eee] px-6 py-4 font-mono text-lg rounded-lg w-full mt-3' placeholder='Enter OTP' /> */}
+          <form onSubmit={(e)=>{
+            submitHandler(e);
+          }}>
+            <input  type="text" className='bg-[#eee] px-6 py-4 font-mono text-lg rounded-lg w-full mt-3' placeholder='Enter OTP' />
 
-            <button className='w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Confirm</button>
+            <Link href={'/CaptainRiding'} className='w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg'>Confirm</Link>
             <button onClick={() => {
               props.setConfirmRidePopupPanel(false)
               props.setRidePopupPanel(false)
