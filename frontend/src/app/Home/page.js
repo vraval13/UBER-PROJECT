@@ -15,11 +15,14 @@ import WaitForDriver from "../Components/WaitForDriver";
 const Home = () => {
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
+  const [pickupSuggestions, setPickupSuggestions] = useState([]);
+  const [destinationSuggestions, setDestinationSuggestions] = useState([]);
   const [panelOpen, setPanelOpen] = useState(false);
   const [vehiclePanel, setVehiclePanel] = useState(false);
   const [confirmRidePanel, setConfirmRidePanel] = useState(false);
   const [vehicleFound, setVehicleFound] = useState(false);
   const [waitingForDriver, setWaitingForDriver] = useState(false);
+  const [fare, setFare] = useState({});
 
   const panelRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -27,6 +30,52 @@ const Home = () => {
   const panelCloseRef = useRef(null);
   const vehicleFoundRef = useRef(null);
   const waitingForDriverRef = useRef(null);
+
+  const handlePickupChange = async (e) => {
+    setPickup(e.target.value);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/maps/get-suggestions?input=${e.target.value}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch pickup suggestions");
+      }
+
+      const data = await response.json();
+      setPickupSuggestions(data);
+    } catch (error) {
+      console.error("Error fetching pickup suggestions:", error);
+    }
+  };
+
+  const handleDestinationChange = async (e) => {
+    setDestination(e.target.value);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/maps/get-suggestions?input=${e.target.value}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch destination suggestions");
+      }
+
+      const data = await response.json();
+      setDestinationSuggestions(data);
+    } catch (error) {
+      console.error("Error fetching destination suggestions:", error);
+    }
+  };
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -76,6 +125,43 @@ const Home = () => {
     });
   }, [waitingForDriver]);
 
+  async function findTrip() {
+    try {
+      // Open the vehicle panel and close the current panel
+      setVehiclePanel(true);
+      setPanelOpen(false);
+
+      // Define pickup and destination from state or other accessible variables
+      const pickup = localStorage.getItem("pickup") || ""; // Example: Replace with actual state logic
+      const destination = localStorage.getItem("destination") || "";
+
+      // Perform the API call using fetch
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/rides/get-fare?pickup=${encodeURIComponent(pickup)}&destination=${encodeURIComponent(destination)}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Attach token
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Check if the response is successful
+      if (!response.ok) {
+        throw new Error(`API call failed: ${response.statusText}`);
+      }
+
+      // Parse the response data as JSON
+      const data = await response.json();
+
+      // Update fare state
+      setFare(data);
+    } catch (error) {
+      console.error("Error fetching fare:", error.message);
+    }
+  }
+
   return (
     <UserProtectWrapper>
       <div className="h-screen relative overflow-hidden">
@@ -111,19 +197,22 @@ const Home = () => {
               <input
                 onClick={() => setPanelOpen(true)}
                 value={pickup}
-                onChange={(e) => setPickup(e.target.value)}
+                onChange={handlePickupChange}
                 className="bg-[#eee] px-12 py-2 text-lg rounded-lg w-full"
                 type="text"
                 placeholder="Add a pick-up location"
               />
               <input
                 value={destination}
-                onChange={(e) => setDestination(e.target.value)}
+                onChange={handleDestinationChange}
                 className="bg-[#eee] px-12 py-2 text-lg rounded-lg w-full mt-3"
                 type="text"
                 placeholder="Enter your destination"
               />
             </form>
+            <button onClick={findTrip} className="bg-black text-white px-4 py-2 rounded-lg mt-3 w-full font-semibold">
+              Find trip
+            </button>
           </div>
 
           {/* Expandable Panel */}
@@ -141,28 +230,28 @@ const Home = () => {
           ref={vehiclePanelRef}
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
         >
-          <VehiclePanel setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
+          <VehiclePanel fare = {fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
         </div>
 
         <div
           ref={confirmRidePanelRef}
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
         >
-          <ConfirmRide setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound}/>
+          <ConfirmRide setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
         </div>
 
         <div
           ref={vehicleFoundRef}
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
         >
-          <LookingForDriver setVehicleFound={setVehicleFound}/>
+          <LookingForDriver setVehicleFound={setVehicleFound} />
         </div>
 
         <div
           ref={waitingForDriverRef}
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
         >
-          <WaitForDriver setWaitingForDriver={setWaitingForDriver}/>
+          <WaitForDriver setWaitingForDriver={setWaitingForDriver} />
         </div>
       </div>
     </UserProtectWrapper>
