@@ -25,6 +25,7 @@ const Home = () => {
   const [waitingForDriver, setWaitingForDriver] = useState(false);
   const [fare, setFare] = useState({});
   const [activeField, setActiveField] = useState(null)
+  const [vehicleType,setVehicleType] = useState(null);
 
   const panelRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -175,6 +176,39 @@ const Home = () => {
     }
   }
 
+  async function createRide() {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/rides/create`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Attach token from localStorage
+            "Content-Type": "application/json", // Set content type
+          },
+          body: JSON.stringify({
+            pickup: localStorage.getItem("pickup"), // Pickup location
+            destination: localStorage.getItem("destination"), // Destination
+            vehicleType: vehicleType, // Vehicle type (e.g., 'car', 'moto', 'auto')
+          }),
+        }
+      );
+  
+      // Check if response is successful
+      if (!response.ok) {
+        throw new Error(`API call failed: ${response.statusText}`);
+      }
+  
+      const data = await response.json();
+      console.log("Ride created successfully:", data);
+  
+      // Handle success: update UI or state as needed
+      // Example: setRideDetails(data);
+    } catch (error) {
+      console.error("Error creating ride:", error.message);
+    }
+  }
+  
   return (
     <UserProtectWrapper>
       <div className="h-screen relative overflow-hidden">
@@ -208,7 +242,7 @@ const Home = () => {
             <h4 className="text-2xl font-semibold">Find a trip</h4>
             <form onSubmit={submitHandler} className="relative py-3">
               <input
-                onClick={() => {setPanelOpen(true),setActiveField('pickup')}}
+                onClick={() => { setPanelOpen(true), setActiveField('pickup') }}
                 value={pickup}
                 onChange={handlePickupChange}
                 className="bg-[#eee] px-12 py-2 text-lg rounded-lg w-full"
@@ -216,10 +250,10 @@ const Home = () => {
                 placeholder="Add a pick-up location"
               />
               <input
-              onClick={()=>{
-                setPanelOpen(true),
-                setActiveField('destination')
-              }}
+                onClick={() => {
+                  setPanelOpen(true),
+                    setActiveField('destination')
+                }}
                 value={destination}
                 onChange={handleDestinationChange}
                 className="bg-[#eee] px-12 py-2 text-lg rounded-lg w-full mt-3"
@@ -250,21 +284,32 @@ const Home = () => {
           ref={vehiclePanelRef}
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
         >
-          <VehiclePanel fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
+          <VehiclePanel selectVehicle = {setVehicleType} fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
         </div>
 
         <div
           ref={confirmRidePanelRef}
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
         >
-          <ConfirmRide setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
+          <ConfirmRide 
+          pickup={pickup}
+          destination={destination}
+          fare={fare}
+          vehicleType={vehicleType}
+          createRide={createRide}
+          setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
         </div>
 
         <div
           ref={vehicleFoundRef}
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
         >
-          <LookingForDriver setVehicleFound={setVehicleFound} />
+          <LookingForDriver pickup={pickup}
+          destination={destination}
+          fare={fare}
+          vehicleType={vehicleType}
+          createRide={createRide}
+          setVehicleFound={setVehicleFound} />
         </div>
 
         <div

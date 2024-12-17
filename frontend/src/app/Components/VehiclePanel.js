@@ -1,7 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
 
-const VehiclePanel = ({ setVehiclePanel, setConfirmRidePanel, selectVehicle, fare }) => {
+const VehiclePanel = ({
+  createRide,
+  setVehiclePanel,
+  setConfirmRidePanel,
+  selectVehicle,
+  fare,
+}) => {
   const vehicles = [
     {
       name: 'UberGo',
@@ -43,7 +49,7 @@ const VehiclePanel = ({ setVehiclePanel, setConfirmRidePanel, selectVehicle, far
       </h5>
 
       {/* Panel Title */}
-      <h3 className="text-2xl font-semibold  mb-5 text-center">Choose a Vehicle</h3>
+      <h3 className="text-2xl font-semibold mb-5 text-center">Choose a Vehicle</h3>
 
       {/* Vehicle Cards */}
       {vehicles.map((vehicle, index) => (
@@ -51,8 +57,9 @@ const VehiclePanel = ({ setVehiclePanel, setConfirmRidePanel, selectVehicle, far
           key={index}
           className="flex border-2 hover:border-black mb-2 rounded-xl w-full p-3 items-center justify-between cursor-pointer transition-all"
           onClick={() => {
-            setConfirmRidePanel(true);
-            // selectVehicle(vehicle.type);
+            setConfirmRidePanel(true); // Show confirmation panel
+            selectVehicle(vehicle.type); // Pass the selected vehicle type dynamically
+            // selectVehicle(vehicle.type); // Uncomment if you need to store selected vehicle type
           }}
         >
           {/* Vehicle Image */}
