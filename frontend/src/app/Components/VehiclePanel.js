@@ -52,7 +52,7 @@ const VehiclePanel = ({ setVehiclePanel, setConfirmRidePanel, selectVehicle, far
           className="flex border-2 hover:border-black mb-2 rounded-xl w-full p-3 items-center justify-between cursor-pointer transition-all"
           onClick={() => {
             setConfirmRidePanel(true);
-            selectVehicle(vehicle.type);
+            // selectVehicle(vehicle.type);
           }}
         >
           {/* Vehicle Image */}

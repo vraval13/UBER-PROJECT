@@ -11,6 +11,7 @@ import VehiclePanel from "../Components/VehiclePanel";
 import ConfirmRide from "../Components/ConfirmRide";
 import LookingForDriver from "../Components/LookingForDriver";
 import WaitForDriver from "../Components/WaitForDriver";
+import axios from "axios";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -23,6 +24,7 @@ const Home = () => {
   const [vehicleFound, setVehicleFound] = useState(false);
   const [waitingForDriver, setWaitingForDriver] = useState(false);
   const [fare, setFare] = useState({});
+  const [activeField, setActiveField] = useState(null)
 
   const panelRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -32,7 +34,12 @@ const Home = () => {
   const waitingForDriverRef = useRef(null);
 
   const handlePickupChange = async (e) => {
-    setPickup(e.target.value);
+    const pickupValue = e.target.value;
+    setPickup(pickupValue);
+
+    // Save pickup to localStorage
+    localStorage.setItem("pickup", pickupValue);
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/maps/get-suggestions?input=${e.target.value}`,
@@ -42,10 +49,7 @@ const Home = () => {
           },
         }
       );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch pickup suggestions");
-      }
+      // if (!response.ok) throw new Error("Failed to fetch pickup suggestions");
 
       const data = await response.json();
       setPickupSuggestions(data);
@@ -55,7 +59,12 @@ const Home = () => {
   };
 
   const handleDestinationChange = async (e) => {
-    setDestination(e.target.value);
+    const destinationValue = e.target.value;
+    setDestination(destinationValue);
+
+    // Save destination to localStorage
+    localStorage.setItem("destination", destinationValue);
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/maps/get-suggestions?input=${e.target.value}`,
@@ -65,10 +74,7 @@ const Home = () => {
           },
         }
       );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch destination suggestions");
-      }
+      // if (!response.ok) throw new Error("Failed to fetch destination suggestions");
 
       const data = await response.json();
       setDestinationSuggestions(data);
@@ -125,28 +131,34 @@ const Home = () => {
     });
   }, [waitingForDriver]);
 
+  // import axios from 'axios';
+
   async function findTrip() {
     try {
       // Open the vehicle panel and close the current panel
       setVehiclePanel(true);
       setPanelOpen(false);
 
-      // Define pickup and destination from state or other accessible variables
-      const pickup = localStorage.getItem("pickup") || ""; // Example: Replace with actual state logic
+      // Define pickup and destination from localStorage or other accessible variables
+      const pickup = localStorage.getItem("pickup") || "";
       const destination = localStorage.getItem("destination") || "";
+
+      console.log('pickup:', pickup);
+      console.log('destination:', destination);
 
       // Perform the API call using fetch
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/rides/get-fare?pickup=${encodeURIComponent(pickup)}&destination=${encodeURIComponent(destination)}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/rides/get-fare?pickup=${encodeURIComponent(pickup)}&destination=${encodeURIComponent(destination)}`, // Use the Next.js environment variable for the base URL
         {
-          method: "GET",
+          method: "GET", // Use GET method with query params
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Attach token
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Attach token from localStorage
+            "Content-Type": "application/json", // Set content type
           },
         }
       );
 
+      // console.log(response.data);
       // Check if the response is successful
       if (!response.ok) {
         throw new Error(`API call failed: ${response.statusText}`);
@@ -155,8 +167,9 @@ const Home = () => {
       // Parse the response data as JSON
       const data = await response.json();
 
-      // Update fare state
+      // Update fare state with the response data
       setFare(data);
+
     } catch (error) {
       console.error("Error fetching fare:", error.message);
     }
@@ -195,7 +208,7 @@ const Home = () => {
             <h4 className="text-2xl font-semibold">Find a trip</h4>
             <form onSubmit={submitHandler} className="relative py-3">
               <input
-                onClick={() => setPanelOpen(true)}
+                onClick={() => {setPanelOpen(true),setActiveField('pickup')}}
                 value={pickup}
                 onChange={handlePickupChange}
                 className="bg-[#eee] px-12 py-2 text-lg rounded-lg w-full"
@@ -203,6 +216,10 @@ const Home = () => {
                 placeholder="Add a pick-up location"
               />
               <input
+              onClick={()=>{
+                setPanelOpen(true),
+                setActiveField('destination')
+              }}
                 value={destination}
                 onChange={handleDestinationChange}
                 className="bg-[#eee] px-12 py-2 text-lg rounded-lg w-full mt-3"
@@ -218,9 +235,12 @@ const Home = () => {
           {/* Expandable Panel */}
           <div ref={panelRef} className="bg-white h-0 overflow-hidden">
             <LocationSearchPanel
+              suggestions={activeField === 'pickup' ? pickupSuggestions : destinationSuggestions}
               setPanelOpen={setPanelOpen}
               setVehiclePanel={setVehiclePanel}
               setPickup={setPickup}
+              setDestination={setDestination}
+              activeField={activeField}
             />
           </div>
         </div>
@@ -230,7 +250,7 @@ const Home = () => {
           ref={vehiclePanelRef}
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
         >
-          <VehiclePanel fare = {fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
+          <VehiclePanel fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
         </div>
 
         <div
