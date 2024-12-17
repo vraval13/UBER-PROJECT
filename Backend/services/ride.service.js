@@ -28,7 +28,7 @@ async function getFare(pickup, destination) {
     moto: 1.5
   };
 
-
+  console.log(distanceTime);
 
   const fare = {
     auto: Math.round(baseFare.auto + ((distanceTime.distance.value / 1000) * perKmRate.auto) + ((distanceTime.duration.value / 60) * perMinuteRate.auto)),
@@ -52,7 +52,7 @@ function getOtp(num) {
 
 
 
-module.exports.createRide = async ({ user, pickup, destination, vehicle }) => {
+module.exports.createRide = async ({ user, pickup, destination, vehicleType }) => {
   if (!user || !pickup || !destination || !vehicleType) {
     throw new Error('All fields are required');
   }

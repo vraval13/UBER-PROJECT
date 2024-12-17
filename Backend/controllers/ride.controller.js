@@ -31,12 +31,12 @@ module.exports.getFare = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
-  const { pickup, destination } = req.body;
+  const { pickup, destination } = req.query;
   try {
     const fare = await rideService.getFare(pickup, destination);
     return res.status(200).json(fare);
   }
   catch (error) {
-    return res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: error.message });
   }
 };
