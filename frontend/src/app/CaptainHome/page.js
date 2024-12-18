@@ -24,11 +24,45 @@ const CaptainHome = () => {
   const { captain } = useContext(CaptainDataContext);
 
   useEffect(() => {
-    if (captain && captain._id) { // Check if captain and captain._id exist
+    if (captain && captain._id) {
+      // Emit 'join' event
       socket.emit("join", {
         userId: captain._id,
-        userType: 'captain'
+        userType: "captain",
       });
+
+      // Function to update location
+      const updateLocation = () => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition((position) => {
+
+            console.log({
+              userId: captain._id,
+              location: {
+                ltd: position.coords.latitude,
+                lng: position.coords.longitude,
+              }
+            });
+            
+            socket.emit("update-location-captain", {
+              userId: captain._id,
+              location: {
+                ltd: position.coords.latitude,
+                lng: position.coords.longitude,
+              },
+            });
+          });
+        }
+      };
+
+      // Update location every 10 seconds
+      const locationInterval = setInterval(updateLocation, 10000);
+
+      // Call immediately on mount
+      updateLocation();
+
+      // Cleanup interval on unmount
+      return () => clearInterval(locationInterval);
     }
   }, [socket, captain]);
 
