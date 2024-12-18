@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import UserContext from "./contexts/UserContext";
 import CaptainContext from "./contexts/CaptainContext";
+import SocketProvider from "./contexts/SocketContext";
 import { UserProtectWrapper } from "./UserProtectWrapper";
 import CaptainProtectWrapper from "./CaptainProtectWrapper";
 import "remixicon/fonts/remixicon.css";
@@ -42,17 +43,19 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CaptainContext>
-          <UserContext>
-            {isCaptainProtected ? (
-              <CaptainProtectWrapper>{children}</CaptainProtectWrapper>
-            ) : isUserProtected ? (
-              <UserProtectWrapper>{children}</UserProtectWrapper>
-            ) : (
-              children
-            )}
-          </UserContext>
-        </CaptainContext>
+        <SocketProvider>
+          <CaptainContext>
+            <UserContext>
+              {isCaptainProtected ? (
+                <CaptainProtectWrapper>{children}</CaptainProtectWrapper>
+              ) : isUserProtected ? (
+                <UserProtectWrapper>{children}</UserProtectWrapper>
+              ) : (
+                children
+              )}
+            </UserContext>
+          </CaptainContext>
+        </SocketProvider>
       </body>
     </html>
   );

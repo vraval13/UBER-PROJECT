@@ -1,13 +1,18 @@
+// import UserContext from '../contexts/UserContext'
+"use client";
 import Image from 'next/image'
-import React from 'react'
+import React , {useContext} from 'react'
+import { CaptainDataContext } from '../contexts/CaptainContext'
 
 const CaptainDetails = () => {
+
+  const {captain} = useContext(CaptainDataContext);
   return (
     <div>
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-start gap-3 ">
           <Image className="h-10 w-10 rounded-full object-cover" src={'/random.jpeg'} width={200} height={200} />
-          <h4 className="text-lg font-medium">Vyom Raval</h4>
+          <h4 className="text-lg font-medium capitalize">{captain.fullname.firstname + " " +captain.fullname.lastname}</h4>
         </div>
         <div>
           <h4 className="text-xl font-semibold">$295.20</h4>

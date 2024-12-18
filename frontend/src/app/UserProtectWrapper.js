@@ -32,6 +32,7 @@ const UserProtectWrapper = ({ children }) =>
 
         if (response.ok) {
           const data = await response.json();
+          console.log("user data fetched: ",data);
           setUser(data);
         } else {
           throw new Error('Failed to fetch user profile');
@@ -39,7 +40,7 @@ const UserProtectWrapper = ({ children }) =>
       } catch (err) {
         console.error(err);
         localStorage.removeItem('token');
-        router.push('/userLogin');
+        router.push('/UserLogin');
       } finally {
         setIsLoading(false);
       }

@@ -3,7 +3,7 @@
 import UserProtectWrapper from "@/app/UserProtectWrapper";
 import LocationSearchPanel from "../Components/LocationSearchPanel";
 import Image from "next/image";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import "remixicon/fonts/remixicon.css";
@@ -12,6 +12,8 @@ import ConfirmRide from "../Components/ConfirmRide";
 import LookingForDriver from "../Components/LookingForDriver";
 import WaitForDriver from "../Components/WaitForDriver";
 import axios from "axios";
+import {SocketContext} from "../contexts/SocketContext";
+import {UserDataContext} from "../contexts/UserContext";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -33,6 +35,24 @@ const Home = () => {
   const panelCloseRef = useRef(null);
   const vehicleFoundRef = useRef(null);
   const waitingForDriverRef = useRef(null);
+
+  // const {sendMessage} = useContext(SocketContext);
+  // const {receiveMessage} = useContext(SocketContext);
+  const {socket} = useContext(SocketContext);
+
+  const {user} = useContext(UserDataContext);
+
+  useEffect(()=>{
+
+    // if(!user) return 
+
+    console.log(user)
+
+    socket.emit("join",{
+      userType:"user",
+      userId:user._id
+    })
+  },[user]);
 
   const handlePickupChange = async (e) => {
     const pickupValue = e.target.value;
