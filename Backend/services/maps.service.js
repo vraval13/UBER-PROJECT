@@ -65,14 +65,14 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
     const response = await axios.get(url);
     if (response.data.status === 'OK') {
       return response.data.predictions.map(prediction => prediction.description).filter(value => value);
-    console.log(response.data);
+      console.log(response.data);
 
     } else {
       throw new Error('Unable to fetch suggestions');
     }
 
     // console.log(response.data);
-    
+
   } catch (err) {
     console.error(err);
     throw err;
@@ -80,17 +80,14 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
 }
 
 module.exports.getCaptainsInTheRadius = async (ltd, lng, radius) => {
-
-  // radius in km
+  // Radius in km; GeoJSON uses [longitude, latitude]
   const captains = await captainModel.find({
     location: {
       $geoWithin: {
-        $centerSphere: [[ltd, lng], radius / 6371]
+        $centerSphere: [[lng, ltd], radius / 6371] // [longitude, latitude]
       }
     }
   });
 
   return captains;
-
-
-}
+};
