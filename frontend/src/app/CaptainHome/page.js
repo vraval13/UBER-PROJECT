@@ -9,6 +9,8 @@ import RidePopUp from '../Components/RidePopUp';
 import ConfirmRidePopUp from "../Components/ConfirmRidePopUp";
 import { useGSAP } from '@gsap/react';
 import gsap from "gsap";
+import { SocketContext } from "../contexts/SocketContext";
+import { CaptainDataContext } from "../contexts/CaptainContext";
 
 const CaptainHome = () => {
   const [ridePopUpPanel, setRidePopUpPanel] = useState(false);
@@ -17,6 +19,18 @@ const CaptainHome = () => {
 
   const ridePopUpPanelRef = useRef(null);
   const confirmRidePopUpPanelRef = useRef(null);
+
+  const { socket } = useContext(SocketContext);
+  const { captain } = useContext(CaptainDataContext);
+
+  useEffect(() => {
+    if (captain && captain._id) { // Check if captain and captain._id exist
+      socket.emit("join", {
+        userId: captain._id,
+        userType: 'captain'
+      });
+    }
+  }, [socket, captain]);
 
   useEffect(() => {
     // Simulating new ride data
