@@ -62,9 +62,13 @@ const CaptainHome = () => {
       updateLocation();
 
       // Cleanup interval on unmount
-      return () => clearInterval(locationInterval);
+      // return () => clearInterval(locationInterval);
     }
   }, [socket, captain]);
+
+  socket.on('new-ride',(data)=>{
+    console.log(data)
+  })
 
   useEffect(() => {
     // Simulating new ride data
@@ -128,6 +132,7 @@ const CaptainHome = () => {
         >
           {ride && (
             <RidePopUp
+          passenger={passenger}
               setRidePopUpPanel={setRidePopUpPanel}
               setConfirmRidePopUpPanel={setConfirmRidePopUpPanel}
               ride={ride}
