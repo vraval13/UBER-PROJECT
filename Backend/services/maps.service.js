@@ -80,14 +80,20 @@ module.exports.getAutoCompleteSuggestions = async (input) => {
 }
 
 module.exports.getCaptainsInTheRadius = async (ltd, lng, radius) => {
-  // Radius in km; GeoJSON uses [longitude, latitude]
-  const captains = await captainModel.find({
-    location: {
-      $geoWithin: {
-        $centerSphere: [[lng, ltd], radius / 6371] // [longitude, latitude]
+  try {
+    const captains = await captainModel.find({
+      location: {
+        $geoWithin: {
+          $centerSphere: [[ltd, lng], radius / 6371], // Radius in radians
+        }
       }
-    }
-  });
+    });
 
-  return captains;
+
+    console.log(`Found ${captains.length} captains in radius`);
+    return captains;
+  } catch (error) {
+    console.error(`Error in getCaptainsInTheRadius: ${error.message}`);
+    throw error;
+  }
 };
