@@ -15,6 +15,7 @@ import axios from "axios";
 import { SocketContext } from "../contexts/SocketContext";
 import { UserDataContext } from "../contexts/UserContext";
 import Link from "next/link";
+import { useRouter } from 'next/router';
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -61,6 +62,12 @@ const Home = () => {
     setVehicleFound(false)
     setWaitingForDriver(true);
     setRide(ride)
+  });
+
+  socket.on('ride-started',ride=>{
+    setWaitingForDriver(false);
+    const router = useRouter();
+    router.push('/Riding')
   });
 
   const handlePickupChange = async (e) => {

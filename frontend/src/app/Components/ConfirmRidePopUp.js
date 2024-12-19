@@ -1,18 +1,51 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
-
+import { useRouter } from "next/navigation";
+import axios from "axios";
 const ConfirmRidePopUp = ({ ride, setConfirmRidePopUpPanel, setRidePopUpPanel }) => {
+  const router = useRouter(); // Get the router instance at the top level
   const [otp, setOtp] = useState("");
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
+
     if (!otp) {
       alert("Please enter the OTP.");
       return;
     }
+
     console.log("OTP Submitted:", otp);
-    // Add your submission logic here
+
+    try {
+      // Construct the URL with query parameters
+      const url = `${process.env.NEXT_PUBLIC_BASE_URL}/rides/start-ride?rideId=${ride._id}&otp=${otp}`;
+
+      // Use fetch with the constructed URL and headers
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      // Check for successful response
+      if (response.ok) {
+        setConfirmRidePopUpPanel(false);
+        setRidePopUpPanel(false);
+
+        // Navigate to the specified route
+        router.replace("/CaptainRiding");
+      } else {
+        // Handle error in response
+        const errorData = await response.json();
+        alert(errorData.message || "Failed to confirm the ride. Please try again.");
+      }
+    } catch (error) {
+      // Handle unexpected error
+      console.error("Error confirming ride:", error);
+      alert("An unexpected error occurred. Please try again.");
+    }
   };
 
   return (
@@ -36,7 +69,7 @@ const ConfirmRidePopUp = ({ ride, setConfirmRidePopUpPanel, setRidePopUpPanel })
             alt="User"
           />
           <h2 className="text-lg font-medium capitalize">
-            {ride?.user?.fullname?.firstname + " " +ride?.user?.fullname?.lastname || "User Name"}
+            {ride?.user?.fullname?.firstname + " " + ride?.user?.fullname?.lastname || "User Name"}
           </h2>
         </div>
         <h5 className="text-lg font-semibold">2.2 KM</h5>
@@ -54,9 +87,7 @@ const ConfirmRidePopUp = ({ ride, setConfirmRidePopUpPanel, setRidePopUpPanel })
             <i className="text-lg ri-map-pin-2-fill"></i>
             <div>
               <h3 className="text-lg font-medium">562/11-A</h3>
-              <p className="text-sm -mt-1 text-gray-600">
-                {ride?.destination || "Destination"}
-              </p>
+              <p className="text-sm -mt-1 text-gray-600">{ride?.destination || "Destination"}</p>
             </div>
           </div>
           <div className="flex items-center gap-5 p-3">
