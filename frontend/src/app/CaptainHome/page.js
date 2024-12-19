@@ -43,7 +43,7 @@ const CaptainHome = () => {
                 lng: position.coords.longitude,
               }
             });
-            
+
             socket.emit("update-location-captain", {
               userId: captain._id,
               location: {
@@ -66,11 +66,39 @@ const CaptainHome = () => {
     }
   }, [socket, captain]);
 
-  socket.on('new-ride',(data)=>{
+  socket.on('new-ride', (data) => {
     console.log(data)
     setRide(data)
     setRidePopUpPanel(true)
   })
+
+  async function confirmRide() {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/rides/confirm`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          rideId: ride._id,
+          captainId: captain._id,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to confirm the ride');
+      }
+
+      setRidePopUpPanel(false);
+      setConfirmRidePopUpPanel(true);
+    } catch (error) {
+      console.error('Error confirming ride:', error.message);
+      // Optionally, handle the error (e.g., display an error message)
+    }
+  }
+
 
   useEffect(() => {
     // Simulating new ride data
@@ -134,11 +162,11 @@ const CaptainHome = () => {
         >
           {ride && (
             <RidePopUp
-          // passenger={passenger}
+              // passenger={passenger}
               setRidePopUpPanel={setRidePopUpPanel}
               setConfirmRidePopUpPanel={setConfirmRidePopUpPanel}
               ride={ride}
-              confirmRide = {confirmRide}
+              confirmRide={confirmRide}
             />
           )}
         </div>
