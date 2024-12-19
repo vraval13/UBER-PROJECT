@@ -19,7 +19,7 @@ const WaitForDriver = ({ setWaitingForDriver, ride }) => {
             <Image src="/car.webp" width={120} height={120} alt="Car" />
             <div className="text-right">
               <h2 className="text-lg font-medium capitalize">
-                {ride.captain?.fullname?.firstname || "Driver Name"}
+                {ride.captain?.fullname?.firstname + " " + ride?.captain?.fullname?.lastname|| "Driver Name"}
               </h2>
               <h4 className="text-xl font-semibold -mt-1 -mb-1">
                 {ride.captain?.vehicle?.plate || "Plate Number"}
@@ -27,6 +27,9 @@ const WaitForDriver = ({ setWaitingForDriver, ride }) => {
               <p className="text-sm text-gray-600">
                 White Honda Mobilio - V
               </p>
+              <h1 className="text-lg font-semibold">
+                OTP: {ride?.otp}
+              </h1>
             </div>
           </div>
 
