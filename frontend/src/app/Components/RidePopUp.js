@@ -18,7 +18,12 @@ const RidePopUp = (props) => {
             width={100}
             height={100}
           />
-          <h2 className='text-lg font-medium'>Vyom Raval</h2>
+          <h2 className='text-lg font-medium'>
+            {props.ride?.user?.fullname?.firstname && props.ride?.user?.fullname?.lastname
+              ? `${props.ride.user.fullname.firstname} ${props.ride.user.fullname.lastname}`
+              : "Unknown User"}
+          </h2>
+
         </div>
         <h5 className='text-lg font-semibold'>2.2 KM</h5>
       </div>
@@ -28,20 +33,20 @@ const RidePopUp = (props) => {
             <i className="ri-map-pin-user-fill"></i>
             <div>
               <h3 className='text-lg font-medium'>562/11-A</h3>
-              <p className='text-sm -mt-1 text-gray-600'>XYZ</p>
+              <p className='text-sm -mt-1 text-gray-600'>{props.ride?.pickup}</p>
             </div>
           </div>
           <div className='flex items-center gap-5 p-3 border-b-2'>
             <i className="text-lg ri-map-pin-2-fill"></i>
             <div>
               <h3 className='text-lg font-medium'>562/11-A</h3>
-              <p className='text-sm -mt-1 text-gray-600'>xyz</p>
+              <p className='text-sm -mt-1 text-gray-600'>{props.ride?.destination}</p>
             </div>
           </div>
           <div className='flex items-center gap-5 p-3'>
             <i className="ri-currency-line"></i>
             <div>
-              <h3 className='text-lg font-medium'>₹150 </h3>
+              <h3 className='text-lg font-medium'>{props.ride?.fare} </h3>
               <p className='text-sm -mt-1 text-gray-600'>Cash Cash</p>
             </div>
           </div>
@@ -50,6 +55,7 @@ const RidePopUp = (props) => {
           <button onClick={() => {
             props.setConfirmRidePopUpPanel(true);
             props.setRidePopUpPanel(false);
+            props.confimrRide()
           }} className=' bg-green-600 w-full text-white font-semibold p-2 px-10 rounded-lg'>Accept</button>
 
           <button onClick={() => {

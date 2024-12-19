@@ -68,6 +68,8 @@ const CaptainHome = () => {
 
   socket.on('new-ride',(data)=>{
     console.log(data)
+    setRide(data)
+    setRidePopUpPanel(true)
   })
 
   useEffect(() => {
@@ -132,10 +134,11 @@ const CaptainHome = () => {
         >
           {ride && (
             <RidePopUp
-          passenger={passenger}
+          // passenger={passenger}
               setRidePopUpPanel={setRidePopUpPanel}
               setConfirmRidePopUpPanel={setConfirmRidePopUpPanel}
               ride={ride}
+              confirmRide = {confirmRide}
             />
           )}
         </div>

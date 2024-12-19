@@ -12,8 +12,9 @@ import ConfirmRide from "../Components/ConfirmRide";
 import LookingForDriver from "../Components/LookingForDriver";
 import WaitForDriver from "../Components/WaitForDriver";
 import axios from "axios";
-import {SocketContext} from "../contexts/SocketContext";
-import {UserDataContext} from "../contexts/UserContext";
+import { SocketContext } from "../contexts/SocketContext";
+import { UserDataContext } from "../contexts/UserContext";
+import Link from "next/link";
 
 const Home = () => {
   const [pickup, setPickup] = useState("");
@@ -27,7 +28,7 @@ const Home = () => {
   const [waitingForDriver, setWaitingForDriver] = useState(false);
   const [fare, setFare] = useState({});
   const [activeField, setActiveField] = useState(null)
-  const [vehicleType,setVehicleType] = useState(null);
+  const [vehicleType, setVehicleType] = useState(null);
 
   const panelRef = useRef(null);
   const vehiclePanelRef = useRef(null);
@@ -38,21 +39,21 @@ const Home = () => {
 
   // const {sendMessage} = useContext(SocketContext);
   // const {receiveMessage} = useContext(SocketContext);
-  const {socket} = useContext(SocketContext);
+  const { socket } = useContext(SocketContext);
 
-  const {user} = useContext(UserDataContext);
+  const { user } = useContext(UserDataContext);
 
-  useEffect(()=>{
+  useEffect(() => {
 
     // if(!user) return 
 
     console.log(user)
 
-    socket.emit("join",{
-      userType:"user",
-      userId:user._id
+    socket.emit("join", {
+      userType: "user",
+      userId: user._id
     })
-  },[user]);
+  }, [user]);
 
   const handlePickupChange = async (e) => {
     const pickupValue = e.target.value;
@@ -213,29 +214,35 @@ const Home = () => {
           }),
         }
       );
-  
+
       // Check if response is successful
       if (!response.ok) {
         throw new Error(`API call failed: ${response.statusText}`);
       }
-  
+
       const data = await response.json();
       console.log("Ride created successfully:", data);
-  
+
       // Handle success: update UI or state as needed
       // Example: setRideDetails(data);
     } catch (error) {
       console.error("Error creating ride:", error.message);
     }
   }
-  
+
   return (
     <UserProtectWrapper>
       <div className="h-screen relative overflow-hidden">
-        {/* Logo Section */}
-        <div className="absolute left-5 top-5 w-16">
-          <Image src="/logo.png" alt="Uber Logo" width={64} height={64} />
+        <div className="fixed p-4 top-0 flex items-center justify-between w-screen">
+          <Image className="w-16" src="/logo.png" alt="Uber Logo" width={64} height={64} />
+          <Link href={'/UserLogin'} className="h-10 w-10 bg-white flex items-center justify-center rounded-full">
+            <i className="text-lg font-medium ri-logout-box-r-line"></i>
+          </Link>
         </div>
+        {/* Logo Section */}
+        {/* <div className="absolute left-5 top-5 w-16">
+          <Image src="/logo.png" alt="Uber Logo" width={64} height={64} />
+        </div> */}
 
         {/* Map Section */}
         <div className="h-screen w-screen">
@@ -304,21 +311,21 @@ const Home = () => {
           ref={vehiclePanelRef}
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-10 pt-12"
         >
-          <VehiclePanel selectVehicle = {setVehicleType} fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
+          <VehiclePanel selectVehicle={setVehicleType} fare={fare} setConfirmRidePanel={setConfirmRidePanel} setVehiclePanel={setVehiclePanel} />
         </div>
 
         <div
           ref={confirmRidePanelRef}
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
         >
-          <ConfirmRide 
-          pickup={pickup}
-          destination={destination}
-          fare={fare}
-          vehicleType={vehicleType}
-          createRide={createRide}
-          // passenger={passenger}
-          setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
+          <ConfirmRide
+            pickup={pickup}
+            destination={destination}
+            fare={fare}
+            vehicleType={vehicleType}
+            createRide={createRide}
+            // passenger={passenger}
+            setConfirmRidePanel={setConfirmRidePanel} setVehicleFound={setVehicleFound} />
         </div>
 
         <div
@@ -326,11 +333,11 @@ const Home = () => {
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
         >
           <LookingForDriver pickup={pickup}
-          destination={destination}
-          fare={fare}
-          vehicleType={vehicleType}
-          createRide={createRide}
-          setVehicleFound={setVehicleFound} />
+            destination={destination}
+            fare={fare}
+            vehicleType={vehicleType}
+            createRide={createRide}
+            setVehicleFound={setVehicleFound} />
         </div>
 
         <div
