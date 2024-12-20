@@ -34,7 +34,7 @@ router.get('/start-ride',
   rideController.startRide
 )
 
-router.get('/end-ride',
+router.post('/end-ride',
   authMiddleware.authCaptain,
   body('rideId').isMongoId().withMessage('Invalid ride id'),
   rideController.endRide
