@@ -15,9 +15,10 @@ import axios from "axios";
 import { SocketContext } from "../contexts/SocketContext";
 import { UserDataContext } from "../contexts/UserContext";
 import Link from "next/link";
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const Home = () => {
+  const router = useRouter();
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [pickupSuggestions, setPickupSuggestions] = useState([]);
@@ -45,31 +46,59 @@ const Home = () => {
 
   const { user } = useContext(UserDataContext);
 
+  // useEffect(() => {
+
+  //   // if(!user) return 
+
+  //   console.log(user)
+
+  //   socket.emit("join", {
+  //     userType: "user",
+  //     userId: user._id
+  //   })
+  // }, [user]);
+
+  // socket.on('ride-confirmed',ride =>{
+
+  //   setVehicleFound(false)
+  //   setWaitingForDriver(true);
+  //   setRide(ride)
+  // });
+
+  // socket.on('ride-started',ride=>{
+  //   setWaitingForDriver(false);
+  //   // const router = useRouter();
+  //   setRide(ride)
+  //   router.replace('/Riding')
+  // });
   useEffect(() => {
+    if (user && user._id) {
+      // Emit 'join' event
+      socket.emit("join", {
+        userId: user._id,
+        userType: "user",
+      });
+    }
 
-    // if(!user) return 
+    socket.on('ride-confirmed', ride => {
+      setVehicleFound(false);
+      setWaitingForDriver(true);
+      setRide(ride);
+    });
 
-    console.log(user)
+    socket.on('ride-started', ride => {
+      setWaitingForDriver(false);
+      setRide(ride);
+      router.replace('/Riding');
+    });
 
-    socket.emit("join", {
-      userType: "user",
-      userId: user._id
-    })
-  }, [user]);
-
-  socket.on('ride-confirmed',ride =>{
-
-    setVehicleFound(false)
-    setWaitingForDriver(true);
-    setRide(ride)
-  });
-
-  socket.on('ride-started',ride=>{
-    setWaitingForDriver(false);
-    const router = useRouter();
-    router.push('/Riding')
-  });
-
+    // Clean up the socket event listeners on component unmount
+    return () => {
+      socket.off('ride-confirmed');
+      socket.off('ride-started');
+    };
+  }, [socket, user, router]);
+  
   const handlePickupChange = async (e) => {
     const pickupValue = e.target.value;
     setPickup(pickupValue);
