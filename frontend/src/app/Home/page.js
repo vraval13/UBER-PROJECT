@@ -16,6 +16,7 @@ import { SocketContext } from "../contexts/SocketContext";
 import { UserDataContext } from "../contexts/UserContext";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const router = useRouter();
@@ -71,7 +72,7 @@ const Home = () => {
   //   setRide(ride)
   //   router.replace('/Riding')
   // });
-  useEffect(() => {
+   useEffect(() => {
     if (user && user._id) {
       // Emit 'join' event
       socket.emit("join", {
@@ -89,7 +90,7 @@ const Home = () => {
     socket.on('ride-started', ride => {
       setWaitingForDriver(false);
       setRide(ride);
-      router.replace('/Riding');
+      router.replace(`/Riding?rideId=${ride._id}&pickup=${ride.pickup}&destination=${ride.destination}&fare=${ride.fare}&captainName=${ride.captain.fullname.firstname}`);
     });
 
     // Clean up the socket event listeners on component unmount
@@ -98,7 +99,6 @@ const Home = () => {
       socket.off('ride-started');
     };
   }, [socket, user, router]);
-  
   const handlePickupChange = async (e) => {
     const pickupValue = e.target.value;
     setPickup(pickupValue);
@@ -376,7 +376,8 @@ const Home = () => {
           ref={vehicleFoundRef}
           className="fixed w-full z-10 bottom-0 translate-y-full bg-white px-3 py-6 pt-12"
         >
-          <LookingForDriver pickup={pickup}
+          <LookingForDriver 
+            pickup={pickup}
             destination={destination}
             fare={fare}
             vehicleType={vehicleType}

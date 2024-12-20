@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+
 const ConfirmRidePopUp = ({ ride, setConfirmRidePopUpPanel, setRidePopUpPanel }) => {
   const router = useRouter(); // Get the router instance at the top level
   const [otp, setOtp] = useState("");
@@ -34,8 +34,12 @@ const ConfirmRidePopUp = ({ ride, setConfirmRidePopUpPanel, setRidePopUpPanel })
         setConfirmRidePopUpPanel(false);
         setRidePopUpPanel(false);
 
-        // Navigate to the specified route
-        router.replace("/CaptainRiding");
+        // Navigate to the specified route and pass data using query parameters
+        router.push(`/CaptainRiding?rideId=${ride._id}&pickup=${ride.pickup}&destination=${ride.destination}&fare=${ride.fare}&username=${ride.user.fullname.firstname}`);
+
+        console.log("at ConfirmRidePopUp Ride Id:", ride._id);
+        console.log("at ConfirmRidePopUp Pickup:", ride.pickup);
+        console.log("at ConfirmRidePopUp Pickup:", ride.destination);
       } else {
         // Handle error in response
         const errorData = await response.json();

@@ -86,6 +86,9 @@ const CaptainHome = () => {
         }),
       });
 
+      console.log('Response:', response);
+      console.log("Ride ID:", ride._id);
+      console.log("Captain ID:", captain._id);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to confirm the ride');
