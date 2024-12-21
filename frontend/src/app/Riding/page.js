@@ -7,6 +7,7 @@ import { useEffect,useContext,useState } from 'react';
 import { SocketContext } from '../contexts/SocketContext';
 import { useRouter } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
+import LiveTracking from '../Components/LiveTracking';
 
 const page = () => {
   const router = useRouter();
@@ -46,6 +47,7 @@ const page = () => {
           width={500}
           height={300}
         />
+        {/* <LiveTracking/> */}
       </div>
       <div clasName="h-1/2 p-8">
         <div className="flex items-center justify-between">

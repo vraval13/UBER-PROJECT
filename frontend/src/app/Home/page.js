@@ -17,6 +17,7 @@ import { UserDataContext } from "../contexts/UserContext";
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useNavigate } from "react-router-dom";
+import LiveTracking from "@/app/Components/LiveTracking";
 
 const Home = () => {
   const router = useRouter();
@@ -290,13 +291,14 @@ const Home = () => {
 
         {/* Map Section */}
         <div className="h-screen w-screen">
-          <Image
+          {/* <Image
             className="h-full w-full object-cover"
             src="/map.gif"
             alt="Uber Map Animation"
             width={500}
             height={300}
-          />
+          /> */}
+          <LiveTracking />
         </div>
 
         {/* Main Content */}

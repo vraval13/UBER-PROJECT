@@ -7,6 +7,7 @@ import "remixicon/fonts/remixicon.css";
 import FinishRide from "../Components/FinishRide";
 import { useRouter, useSearchParams } from "next/navigation";
 import gsap from "gsap";
+import LiveTracking from "../Components/LiveTracking";
 
 const CaptainRiding = () => {
   const router = useRouter();
@@ -62,13 +63,14 @@ const CaptainRiding = () => {
 
       {/* Map Section */}
       <div className="h-4/5">
-        <Image
+        {/* <Image
           className="h-full w-full object-cover"
           src="/map.gif"
           alt="Uber Map Animation"
           width={500}
           height={300}
-        />
+        /> */}
+        <LiveTracking/>
       </div>
 
       {/* Captain Details Section */}
