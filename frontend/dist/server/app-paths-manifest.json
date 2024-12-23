@@ -1,0 +1,16 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/(auth)/CaptainLogin/page": "app/(auth)/CaptainLogin/page.js",
+  "/CaptainRiding/page": "app/CaptainRiding/page.js",
+  "/(auth)/UserLogin/page": "app/(auth)/UserLogin/page.js",
+  "/(auth)/CaptainLogout/page": "app/(auth)/CaptainLogout/page.js",
+  "/CaptainHome/page": "app/CaptainHome/page.js",
+  "/CaptainSignup/page": "app/CaptainSignup/page.js",
+  "/Riding/page": "app/Riding/page.js",
+  "/page": "app/page.js",
+  "/(auth)/UserLogout/page": "app/(auth)/UserLogout/page.js",
+  "/home/page": "app/home/page.js",
+  "/UserSignup/page": "app/UserSignup/page.js",
+  "/Start/page": "app/Start/page.js"
+}
