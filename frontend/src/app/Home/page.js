@@ -1,5 +1,5 @@
 "use client";
-
+//fix in path done by client
 import UserProtectWrapper from "../UserProtectWrapper";
 import LocationSearchPanel from "../Components/LocationSearchPanel";
 import Image from "next/image";
