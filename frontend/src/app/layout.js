@@ -3,8 +3,8 @@ import "./globals.css";
 import UserContext from "./contexts/UserContext";
 import CaptainContext from "./contexts/CaptainContext";
 import SocketProvider from "./contexts/SocketContext";
-import { UserProtectWrapper } from "./UserProtectWrapper";
-import CaptainProtectWrapper from "./CaptainProtectWrapper";
+import  UserProtectWrapper  from "../app/UserProtectWrapper";
+import CaptainProtectWrapper from "../app/CaptainProtectWrapper";
 import "remixicon/fonts/remixicon.css";
 
 const geistSans = Geist({
