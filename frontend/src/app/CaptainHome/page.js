@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect, useContext } from "react";
-import CaptainProtectWrapper from "@/app/CaptainProtectWrapper";
+import CaptainProtectWrapper from "../CaptainProtectWrapper";
 import Link from 'next/link';
 import Image from 'next/image';
 import "remixicon/fonts/remixicon.css";

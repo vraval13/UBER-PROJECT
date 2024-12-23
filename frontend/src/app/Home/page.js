@@ -1,6 +1,6 @@
 "use client";
 
-import UserProtectWrapper from "@/app/UserProtectWrapper";
+import UserProtectWrapper from "../UserProtectWrapper";
 import LocationSearchPanel from "../Components/LocationSearchPanel";
 import Image from "next/image";
 import React, { useState, useRef, useContext, useEffect } from "react";
