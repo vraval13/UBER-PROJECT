@@ -108,11 +108,11 @@ const CaptainHome = () => {
     // Simulating new ride data
     setTimeout(() => {
       setRide({
-        captainName: "Vyom Raval",
-        distance: "2.2 KM",
-        pickup: "562/11-A, XYZ",
-        dropoff: "562/11-A, xyz",
-        fare: "₹150",
+        captainName: "",
+        distance: "",
+        pickup: "",
+        dropoff: "",
+        fare: "",
       });
       setRidePopUpPanel(true);
     }, 2000);
