@@ -5,7 +5,7 @@ import LocationSearchPanel from "../Components/LocationSearchPanel";
 import Image from "next/image";
 import React, { useState, useRef, useContext, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
+import gsap from "gsap"; 
 import "remixicon/fonts/remixicon.css";
 import VehiclePanel from "../Components/VehiclePanel";
 import ConfirmRide from "../Components/ConfirmRide";
