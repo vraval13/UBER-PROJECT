@@ -2,7 +2,7 @@
 import React, { useState, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { UserDataContext } from "../contexts/UserContext";
+import { UserDataContext } from "@/app/contexts/UserContext";
 
 const page = () => {
   const [email, setEmail] = useState('');

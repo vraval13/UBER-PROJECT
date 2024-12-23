@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState, useContext } from "react";
-import { CaptainDataContext } from '../contexts/CaptainContext';
+import { CaptainDataContext } from '@/app/contexts/CaptainContext';
 
 const page = () => {
   const [email, setEmail] = useState('');
