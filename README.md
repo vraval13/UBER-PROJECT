@@ -62,6 +62,9 @@ The **Uber** project is a fully functional simulation of the popular ride-hailin
 ### Finishing the Ride
 ![image](https://github.com/user-attachments/assets/070c2c61-1de0-4dd4-b00c-a07c5714eea0)
 
+### After Completion of Ride
+![image](https://github.com/user-attachments/assets/c7503863-e666-40a3-b7b7-f124a8a53377)
+
 ---
 
 ## Technologies Used 💻
