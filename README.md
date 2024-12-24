@@ -33,14 +33,34 @@ The **Uber** project is a fully functional simulation of the popular ride-hailin
 
 ## Screenshots 📷
 
-### Home Page 🏠
-![Home Page](https://via.placeholder.com/800x400)
+### Signup / Sign 
 
-### Ride Booking Page 🚖
-![Ride Booking Page](https://via.placeholder.com/800x400)
+#### User
+![image](https://github.com/user-attachments/assets/388aa401-bcc4-47a8-a0d4-208f51ab90f7)
+
+#### Captain
+![image](https://github.com/user-attachments/assets/c09816cf-aa3c-4ddc-8b11-03aa31f43d42)
+
+### Home Page 🏠
+![image](https://github.com/user-attachments/assets/7acd6a47-f013-4078-9b24-a3c6f1e4abff)
+
+### Making a Ride
+![Screenshot 2024-12-21 112042](https://github.com/user-attachments/assets/b27fb96d-109d-4b68-a8b3-5812bb4121aa)
+
+### Choosing a Vehicle for a Ride
+![Screenshot 2024-12-21 112129](https://github.com/user-attachments/assets/72993758-1e52-4bbb-9bf6-9cb2c2292a42)
+
+### Making a Request for Ride Booking 🚖
+![Screenshot 2024-12-21 112254](https://github.com/user-attachments/assets/6df95861-28a2-4bbb-8244-c60a56723d8e)
+
+### Confirming Ride with OTP
+![image](https://github.com/user-attachments/assets/718c3c0b-ca4d-41a4-9317-57dfa9d6f05a)
 
 ### Live Ride Tracking 📍
-![Live Ride Tracking](https://via.placeholder.com/800x400)
+![image](https://github.com/user-attachments/assets/757c9a73-d7b6-47bf-9666-ccdc74e354b1)
+
+### Finishing the Ride
+![image](https://github.com/user-attachments/assets/070c2c61-1de0-4dd4-b00c-a07c5714eea0)
 
 ---
 
